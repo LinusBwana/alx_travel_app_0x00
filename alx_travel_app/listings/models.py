@@ -3,6 +3,7 @@ import uuid
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
+from datetime import date
 
 # Create your models here.
 class Property(models.Model):
@@ -16,7 +17,7 @@ class Property(models.Model):
     name = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     location = models.CharField(max_length=255)
-    pricepernight = models.DecimalField(max_digits=10, validators=[MinValueValidator(Decimal('0.01'))])
+    pricepernight = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -59,6 +60,8 @@ class Booking(models.Model):
         if self.start_date and self.end_date:
             if self.start_date >= self.end_date:
                 raise ValidationError('End date must be after start date')
+            if self.start_date < date.today():
+                raise ValidationError('Start date cannot be in the past')
 
     def __str__(self):
         return f"Booking {self.booking_id} - {self.property.name}"
