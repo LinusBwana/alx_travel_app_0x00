@@ -1,3 +1,4 @@
+# listings/management/commands/populate_db.py
 import random
 from decimal import Decimal
 from datetime import date, timedelta
@@ -7,7 +8,7 @@ from listings.models import Property, Booking, Review
 
 
 class Command(BaseCommand):
-    help = 'Seed the database with sample listings data'
+    help = 'Populate the database with sample listings data'
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -130,62 +131,62 @@ class Command(BaseCommand):
             {
                 'name': 'Cozy Beach House',
                 'description': 'Beautiful oceanfront property with stunning sunset views. Perfect for a romantic getaway or family vacation.',
-                'location': 'Malibu, CA',
-                'price_per_night': Decimal('250.00')
+                'location': 'Diani Beach, Mombasa',
+                'pricepernight': Decimal('15000.00')
             },
             {
-                'name': 'Downtown Loft',
-                'description': 'Modern loft in the heart of the city. Walking distance to restaurants, shops, and entertainment.',
-                'location': 'New York, NY',
-                'price_per_night': Decimal('180.00')
+                'name': 'Downtown Apartment',
+                'description': 'Modern apartment in the heart of the city. Walking distance to restaurants, shops, and entertainment.',
+                'location': 'Westlands, Nairobi',
+                'pricepernight': Decimal('8000.00')
             },
             {
-                'name': 'Mountain Cabin Retreat',
-                'description': 'Rustic cabin surrounded by pine trees and mountain views. Great for hiking and outdoor activities.',
-                'location': 'Aspen, CO',
-                'price_per_night': Decimal('220.00')
+                'name': 'Mountain View Cottage',
+                'description': 'Rustic cottage with stunning mountain views. Great for hiking and outdoor activities.',
+                'location': 'Nanyuki, Mount Kenya',
+                'pricepernight': Decimal('12000.00')
             },
             {
-                'name': 'Luxury Villa with Pool',
-                'description': 'Spacious villa with private pool, garden, and panoramic city views. Perfect for large groups.',
-                'location': 'Beverly Hills, CA',
-                'price_per_night': Decimal('450.00')
+                'name': 'Luxury Safari Lodge',
+                'description': 'Spacious lodge with private deck and wildlife views. Perfect for safari experiences.',
+                'location': 'Maasai Mara, Narok',
+                'pricepernight': Decimal('25000.00')
             },
             {
-                'name': 'Historic Townhouse',
-                'description': 'Charming historic home in the old quarter. Beautifully restored with modern amenities.',
-                'location': 'Boston, MA',
-                'price_per_night': Decimal('195.00')
+                'name': 'Historic Stone House',
+                'description': 'Charming historic home in the old town. Beautifully restored with modern amenities.',
+                'location': 'Stone Town, Lamu',
+                'pricepernight': Decimal('10000.00')
             },
             {
                 'name': 'Lakefront Cottage',
                 'description': 'Peaceful cottage right on the lake with private dock. Perfect for fishing and water activities.',
-                'location': 'Lake Tahoe, NV',
-                'price_per_night': Decimal('175.00')
+                'location': 'Lake Naivasha, Nakuru',
+                'pricepernight': Decimal('9000.00')
             },
             {
-                'name': 'Desert Oasis',
-                'description': 'Unique desert property with infinity pool and stunning landscape views. Very private and serene.',
-                'location': 'Scottsdale, AZ',
-                'price_per_night': Decimal('300.00')
+                'name': 'Highland Retreat',
+                'description': 'Unique highland property with stunning landscape views. Very private and serene.',
+                'location': 'Nyeri, Central Kenya',
+                'pricepernight': Decimal('14000.00')
             },
             {
-                'name': 'Urban Studio',
+                'name': 'City Studio',
                 'description': 'Compact but efficient studio apartment in trendy neighborhood. Perfect for solo travelers.',
-                'location': 'Portland, OR',
-                'price_per_night': Decimal('85.00')
+                'location': 'Kilimani, Nairobi',
+                'pricepernight': Decimal('5000.00')
             },
             {
-                'name': 'Farmhouse Escape',
-                'description': 'Working farm with guest accommodations. Experience rural life with farm-to-table meals.',
-                'location': 'Napa Valley, CA',
-                'price_per_night': Decimal('275.00')
+                'name': 'Tea Estate Bungalow',
+                'description': 'Historic bungalow on working tea estate. Experience rural life with beautiful green views.',
+                'location': 'Kericho, Rift Valley',
+                'pricepernight': Decimal('11000.00')
             },
             {
-                'name': 'Penthouse Suite',
-                'description': 'Luxury penthouse with 360-degree city views. High-end finishes and premium amenities.',
-                'location': 'Miami, FL',
-                'price_per_night': Decimal('400.00')
+                'name': 'Coastal Villa',
+                'description': 'Luxury villa with ocean views and private beach access. High-end finishes and premium amenities.',
+                'location': 'Malindi, Kilifi',
+                'pricepernight': Decimal('20000.00')
             }
         ]
 
@@ -197,8 +198,17 @@ class Command(BaseCommand):
                 data = {
                     'name': f'Property {i+1}',
                     'description': f'This is a sample property description for property {i+1}. It offers great amenities and comfort.',
-                    'location': random.choice(['Los Angeles, CA', 'Miami, FL', 'Austin, TX', 'Seattle, WA', 'Denver, CO']),
-                    'price_per_night': Decimal(str(random.randint(50, 400)))
+                    'location': random.choice([
+                        'Karen, Nairobi', 
+                        'Nyali, Mombasa', 
+                        'Kisumu, Nyanza', 
+                        'Nakuru, Rift Valley', 
+                        'Eldoret, Uasin Gishu',
+                        'Thika, Kiambu',
+                        'Machakos, Eastern',
+                        'Kitale, Trans Nzoia'
+                    ]),
+                    'pricepernight': Decimal(str(random.randint(3000, 20000)))
                 }
 
             property_obj = Property.objects.create(
@@ -206,7 +216,7 @@ class Command(BaseCommand):
                 name=data['name'],
                 description=data['description'],
                 location=data['location'],
-                price_per_night=data['price_per_night']
+                pricepernight=data['pricepernight']
             )
             properties.append(property_obj)
 
@@ -240,7 +250,7 @@ class Command(BaseCommand):
                 # Skip this booking to avoid conflicts
                 continue
             
-            total_price = property_obj.price_per_night * nights
+            total_price = property_obj.pricepernight * nights
             status = random.choice(booking_statuses)
             
             booking = Booking.objects.create(
